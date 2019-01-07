@@ -1,0 +1,181 @@
+{
+    "Tenants": [
+      {
+        "Name": "ndaas",
+        "Tier": "3",
+        "Services": [
+          {
+            "Name": "scale",
+            "Orchestrator": "universe",
+            "ServicePrincipal": "scale-strict",
+            "ConfigFile": "scale/options.json"
+          },
+          {
+            "Name": "kafka-zookeeper",
+            "Orchestrator": "universe",
+            "ServicePrincipal": "kafka-zookeeper-strict",
+            "ConfigFile": "kafka/kafka-zk-options.json"
+          },
+          {
+            "Name": "kafka",
+            "ServicePrincipal": "kafka-strict",
+            "Orchestrator": "universe",
+            "ConfigFile": "kafka/kafka-options.json"
+          },
+          {
+            "Name": "testapp1",
+            "Orchestrator": "marathon",
+            "ServiceDocs": "testapp/testapp_marathon.json"
+          },
+          {
+            "Name": "testapp2",
+            "Orchestrator": "marathon",
+            "ServiceDocs": "testapp2/testapp2_marathon.json"
+          },
+          {
+            "Name": "testappp3",
+            "Orchestrator": "metronome",
+            "ServiceDocs": "testapp3/testapp3_metronome.json"
+          },
+          {
+            "Name": "jenkins",
+            "Orchestrator": "universe",
+            "ServicePrincipal": "jenkins-strict",
+            "ConfigFile": "jenkins/options.json"
+          },
+          {
+            "Name": "marathon-autoscaler",
+            "Orchestrator": "universe",
+            "ServicePrincipal": "marathon-autoscaler"
+          }
+        ],
+        "Secrets": [
+          {
+            "ndaasbuild-ssl-cert": "ndaasbuild_ssl_cert",
+            "ndaasbuild-ssl-key": "ndaasbuild_ssl_key",
+            "ndaaspullconfig": "ndaaspullconfig",
+            "DBUsername": "DBUsername",
+            "DBPassword": "DBPassword"
+          }
+        ],
+        "ServiceAccounts": [
+          {
+            "Namespace": "ndaas",
+            "ServicePrincipal": "scale-strict",
+            "SecretName": "scale-strict",
+            "PolicyDoc": "scale/scale-strict.txt"
+          },
+          {
+            "Namespace": "ndaas",
+            "ServicePrincipal": "kafka-zookeeper-strict",
+            "SecretName": "kafka-zookeeper-strict",
+            "PolicyDoc": "kafka/kafka-zookeeper-strict.txt"
+          },
+          {
+            "Namespace": "ndaas",
+            "ServicePrincipal": "kafka-strict",
+            "SecretName": "kafka-strict",
+            "PolicyDoc": "kafka/kafka-strict.txt"
+          },
+          {
+            "Namespace": "ndaas",
+            "ServicePrincipal": "marathon-autoscaler",
+            "SecretName": "marathon-autoscaler",
+            "PolicyDoc": "autoscaler/dcos-service-account-policies.txt"
+          },
+          {
+            "Namespace": "ndaas",
+            "ServicePrincipal": "jenkins-strict",
+            "SecretName": "jenkins-strict",
+            "PolicyDoc": "jenkins/jenkins-strict.txt"
+          }
+        ],
+        "SecurityPolicies": [
+          {
+            "C2S": [
+              {
+                "Type": "bucket",
+                "PolicyDoc": "bucket_policy.json"
+              },
+              {
+                "Type": "user",
+                "PolicyDoc": "ndaas_iam_policy.json"
+              }
+            ],
+            "DCOS": [
+              {
+                "GroupName": "Devs",
+                "PolicyDoc": "dcos-policy-readonly.txt"
+              }
+            ]
+          }
+        ],
+        "Logrotate": [
+          {
+            "ConfigFile": "ndaaslogs"
+          }
+        ],
+        "IaaS": [
+          {
+            "Type": "cloudformation",
+            "Provider": "UC2S",
+            "ConfigFile": "RDS_S3_cloudformation.json"
+          }
+        ],
+        "DNS": [
+          {
+            "Production": [
+              {
+                "ndaas.nga.mil": "ndaas-prod.us-east-1.elb.amazon.com",
+                "DN": "CN=ndaas.nga.mil,OU=NGA,OU=bar,OU=foo"
+              }
+            ],
+            "Development": [
+              {
+                "ndaas-dev.nga.mil": "ndaas-dev.us-east-1.elb.amazonaws.com",
+                "DN": "CN=ndaas-dev.nga.mil,OU=NGA,OU=bar,OU=foo"
+              }
+            ]
+          }
+        ],
+        "ODS": [
+          {
+            "Type": "NASA",
+            "Endpoint": "arn:aws:sns:us-east-1:123456789:testbucket/testfolder"
+          }
+        ],
+        "SoftwareList": [],
+        "Conops": "(U) NSG Data Analytic Architecture Service is a container based distributed GEOINT processing cluster built for fiscally efficient massive scale analytics. By including a value of ConfigFile under type/universe services, a Tenant can add universe app unique override values in addition to including the core name, service_account, & service_account_secret of which the NDAAS Auto Ingestor will automatically detect and replace using the corresponding values listed under the Secrets & ServiceAccounts section of this tenant spec file.",
+        "Wiki": "https://redmine.devops.geointservices.io/projects/ndaas/wiki"
+      }
+    ],
+    
+    "plans": [
+        {
+            "name": "alb-bank",
+            "strategy": "SERIAL",
+            "manual": false,
+            "version": "1.0",
+            "phases": [
+                {
+                    "name": "config",
+                    "enabled": true,
+                    "strategy": "SERIAL",
+                    "steps": [
+                        "vault-cfg",
+                        "kong-algi",
+                        "kong-trigm",
+                        "frontend-install"
+                    ]
+                }
+            ],
+            "platform-dependencies" : [
+                { "name" : "Elastic Search", "version" : "6.x"},
+                { "name" : "Apache Kafka", "version" : "1.x"}
+            ]
+        }
+    ]
+    
+    
+  }
+  
