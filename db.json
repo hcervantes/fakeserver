@@ -38,6 +38,26 @@
             "ServiceDocs": "testapp3/testapp3_metronome.json"
           },
           {
+            "Name": "vault-cfg",
+            "Orchestrator": "marathon",
+            "ServiceDocs": "vault-cfg/vault-cfg_marathon.json"
+          },
+          {
+            "Name": "kong-algi",
+            "Orchestrator": "marathon",
+            "ServiceDocs": "kong-algi/kong-algi_marathon.json"
+          },
+          {
+            "Name": "kong-trigm",
+            "Orchestrator": "metronome",
+            "ServiceDocs": "kong-trigm/kong-trigm_metronome.json"
+          },
+            {
+            "Name": "frontend-install",
+            "Orchestrator": "marathon",
+            "ServiceDocs": "frontend-install/frontend-install_marathon.json"
+          },
+          {
             "Name": "jenkins",
             "Orchestrator": "universe",
             "ServicePrincipal": "jenkins-strict",
