@@ -76,6 +76,13 @@
             "ndaaspullconfig": "ndaaspullconfig_value",
             "DBUsername": "DBUsername_value",
             "DBPassword": "DBPassword_value"
+          },
+          {
+            "ndaasbuild-ssl-cert": "2nd_ndaasbuild_ssl_cert_value",
+            "ndaasbuild-ssl-key": "2nd_ndaasbuild_ssl_key_value",
+            "ndaaspullconfig": "2nd_ndaaspullconfig_value",
+            "DBUsername": "2nd_DBUsername_value",
+            "DBPassword": "2nd_DBPassword_value"
           }
         ],
         "ServiceAccounts": [
